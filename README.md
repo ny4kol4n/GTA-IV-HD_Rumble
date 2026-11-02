@@ -32,7 +32,7 @@ Alternatively run `bash Play-GTA-IV.sh` and, after playing, `bash Stop-GTA-IV-HD
 
 ## Steam Deck: ordinary rumble
 
-The user confirmed ordinary rumble works in Gaming Mode with Steam Input enabled. Install the ASI/INI, set `[Triggers] Enabled=0`, and launch GTA IV normally. No Linux bridge, shell script or desktop shortcut is required for ordinary rumble. The impulse-trigger bridge is only for a supported external USB Xbox Series controller, not the Deck built-in triggers.
+Ordinary rumble works in Gaming Mode with Steam Input enabled. Install the ASI/INI, set `[Triggers] Enabled=0`, and launch GTA IV normally. No Linux bridge, shell script or desktop shortcut is required for ordinary rumble. The impulse-trigger bridge is only for a supported external USB Xbox Series controller.
 
 ## Controls
 
@@ -55,7 +55,7 @@ Edit **the INI next to the installed ASI**, then restart GTA IV. The defaults pr
 
 ## Compatibility and limitations
 
-- The earlier 0.5.2 effects were confirmed by the user on **Bazzite/Proton, USB Xbox Series 045e:0b12, Steam Input enabled**. The user also confirmed ordinary rumble on Steam Deck in Gaming Mode. Version 1.0 is the renamed release; its rebuilt binaries have not yet been retested in-game. See [VALIDATION.md](VALIDATION.md).
+- The effects were confirmed on **Bazzite/Proton Experemental, USB Xbox Series 045e:0b12, Steam Input enabled**. Also confirmed ordinary rumble on Steam Deck in Gaming Mode. Version 1.0 is the renamed release; its rebuilt binaries have not yet been retested in-game. See [VALIDATION.md](VALIDATION.md).
 - Bluetooth, wireless dongles, other external controller models and other GTA IV versions are unverified. The Linux bridge intentionally targets one USB `045e:0b12` device. Ordinary ASI/XInput rumble does not require that bridge.
 - Share is exposed in the virtual Series mapping; its Steam action and the new virtual identity still need user confirmation. A virtual device can use different Steam bindings from the physical one.
 - Effects estimate motion from speed/position, not actual RPM, gears, road surface or brake-pedal input. Coasting can trigger braking feedback; stock vehicle grouping inaccuracies remain.
