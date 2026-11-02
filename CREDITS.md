@@ -4,7 +4,7 @@ Original mod: **Advanced Controller Rumble Vehicles-WIP / RumbleNutsClassic**, a
 
 https://www.nexusmods.com/gta4/mods/712?tab=description
 
-This is an unofficial modified C++ port prepared with Codex at a user's request, plus a Linux input/rumble bridge. Vehicle grouping, coefficients and effect logic originate from that mod. It is not an official release by the original author or the FusionFix team. The original C# attachment is not redistributed here.
+This is an unofficial modified C++ port developed with assistance from Codex, plus a Linux input/rumble bridge. Vehicle grouping, coefficients and effect logic originate from that mod. It is not an official release by the original author or the FusionFix team. The original C# attachment is not redistributed here.
 
 During the original investigation, the Nexus page allowed modification and redistribution with attribution and prohibited use of its assets in sold mods. Preserve the original author credit, link and source conditions. No separate general license accompanied the supplied script. This package does not relicense the original material under MIT/GPL; no blanket new license is asserted here. Consult the original page for its current terms.
 

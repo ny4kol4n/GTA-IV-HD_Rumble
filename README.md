@@ -55,9 +55,9 @@ Edit **the INI next to the installed ASI**, then restart GTA IV. The defaults pr
 
 ## Compatibility and limitations
 
-- The effects were confirmed on **Bazzite/Proton Experemental, USB Xbox Series 045e:0b12, Steam Input enabled**. Also confirmed ordinary rumble on Steam Deck in Gaming Mode. Version 1.0 is the renamed release; its rebuilt binaries have not yet been retested in-game. See [VALIDATION.md](VALIDATION.md).
+- The effects were confirmed on **Bazzite/Proton Experimental, USB Xbox Series 045e:0b12, Steam Input enabled**. Ordinary rumble is also confirmed to work on Steam Deck in Gaming Mode. Version 1.0 is the renamed release; its rebuilt binaries have not yet been retested in-game. See [VALIDATION.md](VALIDATION.md).
 - Bluetooth, wireless dongles, other external controller models and other GTA IV versions are unverified. The Linux bridge intentionally targets one USB `045e:0b12` device. Ordinary ASI/XInput rumble does not require that bridge.
-- Share is exposed in the virtual Series mapping; its Steam action and the new virtual identity still need user confirmation. A virtual device can use different Steam bindings from the physical one.
+- Share is exposed in the virtual Series mapping; its Steam action and the new virtual identity still need verification. A virtual device can use different Steam bindings from the physical one.
 - Effects estimate motion from speed/position, not actual RPM, gears, road surface or brake-pedal input. Coasting can trigger braking feedback; stock vehicle grouping inaccuracies remain.
 - Shooting is detected in a short time window. The first shot may precede detection, and unrelated stock effects in that window can also be scaled. The game must resolve `XInputSetState` through the hooked path; the log reports when this happens.
 - During shooting, vehicle effects yield for 650 ms after detection. This is not a full mixer for all other mods. Trigger recoil derives from stock shooting rumble; no stock command means no synthetic trigger recoil.

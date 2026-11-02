@@ -11,14 +11,14 @@
 - On the actual Bazzite host, bridge startup reached READY; repeated startup recognized the same service; stop requested kernel reattachment and xpad was bound again. No game was launched for this test.
 - Checksums cover the two supplied executables. Personal logs, backup binaries and game files are not packaged.
 
-## User reports from earlier builds
+## Confirmed functionality in earlier builds
 
-The user confirmed impulse-trigger functionality on USB Xbox Series with Steam Input enabled. A swapped X/Y mapping was subsequently corrected. The user confirmed the 0.5.2 braking fix. Steam logs confirmed the virtual Series identity and Share mapping; the Share action itself was not explicitly confirmed.
+Impulse-trigger functionality is confirmed on USB Xbox Series with Steam Input enabled. A swapped X/Y mapping was subsequently corrected. The 0.5.2 braking fix is confirmed to work. Steam logs confirmed the virtual Series identity and Share mapping; the Share action itself was not explicitly confirmed.
 
 ## Not yet verified
 
 All combinations of settings, the complete desktop-to-game launch, and physical motor behavior with the renamed 1.0 binaries need an in-game check. Automated test success and packet counts do not prove physical feedback. Bluetooth, wireless dongles, other controller models, other game builds and other distributions are unverified.
 
-## Steam Deck user validation and 1.0 naming
+## Steam Deck verification and 1.0 naming
 
-The user confirmed that ordinary rumble works well on Steam Deck in Gaming Mode without the trigger bridge. Version 1.0 renames the project, ASI/INI filenames, main INI section and desktop shortcuts; effect tuning is unchanged. This user report does not confirm impulse triggers on Steam Deck or all configuration combinations.
+Ordinary rumble is confirmed to work on Steam Deck in Gaming Mode without the trigger bridge. Version 1.0 renames the project, ASI/INI filenames, main INI section and desktop shortcuts; effect tuning is unchanged. This verification does not cover impulse triggers on Steam Deck or all configuration combinations.
