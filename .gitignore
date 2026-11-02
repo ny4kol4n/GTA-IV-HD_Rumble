@@ -1,0 +1,9 @@
+*.log
+SavedVehicleHashes.txt
+engine_test
+*.backup
+*.bak
+__pycache__/
+backups/
+*.desktop
+.DS_Store

@@ -1,0 +1,5 @@
+# Optional administrator setup; not installed by GTA-IV-HD_Rumble.
+# Must run before seat-late rules for active-session ACL assignment.
+SUBSYSTEM=="usb", ATTR{idVendor}=="045e", ATTR{idProduct}=="0b12", MODE="0660", TAG+="uaccess"
+# uinput access lets the active local user create virtual input devices.
+SUBSYSTEM=="misc", KERNEL=="uinput", OPTIONS+="static_node=uinput", TAG+="uaccess"
