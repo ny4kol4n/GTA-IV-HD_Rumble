@@ -1,6 +1,7 @@
 // Linux input/rumble bridge: physical SDL GIP -> uinput -> Steam Input.
 // No EVIOCGRAB, driver installation, Steam configuration or root required.
 #include <SDL3/SDL.h>
+#include "rumble_levels.hpp"
 #include <linux/uinput.h>
 #include <linux/usbdevice_fs.h>
 #include <filesystem>
@@ -140,7 +141,7 @@ int main(int argc,char** argv){
             int l=0,r=0;for(auto& e:effects)if(e.running&&now()>=e.begins){if(e.ends&&now()>=e.ends){e.running=false;continue;}l=std::min(65535,l+int(e.effect.u.rumble.strong_magnitude));r=std::min(65535,r+int(e.effect.u.rumble.weak_magnitude));}
             int tl=0,tr=0;if(received&&now()-received<=250){tl=std::min(8191,int(trigger.left));tr=std::min(8191,int(trigger.right));}
             if(now()-lastSend>=40){
-                if(l!=oldL||r!=oldR||l||r){if(!SDL_RumbleGamepad(pad,uint16_t(l),uint16_t(r),120)){fprintf(stderr,"Main rumble failed: %s\n",SDL_GetError());result=1;break;}oldL=l;oldR=r;}
+                if(l!=oldL||r!=oldR||l||r){if(!SDL_RumbleGamepad(pad,gipMainLevel(l),gipMainLevel(r),120)){fprintf(stderr,"Main rumble failed: %s\n",SDL_GetError());result=1;break;}oldL=l;oldR=r;}
                 if(tl!=oldTL||tr!=oldTR||tl||tr){if(!SDL_RumbleGamepadTriggers(pad,uint16_t(tl),uint16_t(tr),120)){fprintf(stderr,"Trigger rumble failed: %s\n",SDL_GetError());result=1;break;}oldTL=tl;oldTR=tr;}
                 lastSend=now();
             }

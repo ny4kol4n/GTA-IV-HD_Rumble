@@ -52,3 +52,7 @@ Do not stop the bridge during gameplay: the virtual controller disappears. Norma
 ## Build
 
 From the package root: `bash build-bridge.sh` with a C++17 compiler, SDL3 development package and pkg-config. No third-party runtime libraries are bundled. Physical Bluetooth/dongle access and additional controller models are not implemented.
+
+### Very weak main rumble
+
+SDL's USB GIP backend quantizes motor strength in steps of 655 out of 65535. The bridge raises nonzero main-motor requests below 655 to that minimum so weak driving and burst-tyre effects are not rounded to silence while triggers remain active. Zero still stops the motor. Trigger strength and stronger main-motor requests are unchanged. Values below this hardware step cannot produce distinct steady strengths through this backend.
