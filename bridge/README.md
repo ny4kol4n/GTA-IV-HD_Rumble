@@ -56,3 +56,9 @@ From the package root: `bash build-bridge.sh` with a C++17 compiler, SDL3 develo
 ### Very weak main rumble
 
 SDL's USB GIP backend quantizes motor strength in steps of 655 out of 65535. The bridge raises nonzero main-motor requests below 655 to that minimum so weak driving and burst-tyre effects are not rounded to silence while triggers remain active. Zero still stops the motor. Trigger strength and stronger main-motor requests are unchanged. Values below this hardware step cannot produce distinct steady strengths through this backend.
+
+### Automatic main-motor muting while driving
+
+While fresh acceleration or braking trigger effects are active, the bridge mutes both main motors. This includes other simultaneous main-motor effects such as burst tyres or bumps. Main feedback resumes when the driving triggers stop or their commands expire (250 ms). On-foot shooting keeps main and trigger rumble together. Without the bridge, normal XInput vehicle rumble remains unchanged; no INI edits are needed.
+
+Install the updated ASI and bridge together: the 12-byte trigger packet identifies driving effects. The bridge also accepts old 8-byte packets without automatic muting, since those do not identify the effect type.

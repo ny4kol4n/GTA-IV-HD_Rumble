@@ -4,6 +4,7 @@
 #include "game.hpp"
 #include "engine.hpp"
 #include "shooting.hpp"
+#include "trigger_packet.hpp"
 #include <xinput.h>
 #include <cstdio>
 #include <string>
@@ -29,8 +30,7 @@ static float triggerDriveGain=1,triggerShotGain=1,shotFootGain=1.5f,shotVehicleG
 static uint16_t triggerLeft=0,triggerRight=0,shotTrigger=0;
 static ULONGLONG triggerFreshness=0,shotFreshness=0;
 static void publishTriggers(uint16_t l=0,uint16_t r=0){EnterCriticalSection(&lock);triggerLeft=l;triggerRight=r;triggerFreshness=GetTickCount64();LeaveCriticalSection(&lock);}
-struct TriggerPacket {uint32_t magic=0x354E4252;uint16_t left=0,right=0;};
-static_assert(sizeof(TriggerPacket)==8);
+using TriggerPacket=rn::TriggerPacket;
 static bool saveHashes=true;
 static void append(const wchar_t* name,const char* text){
     HANDLE f=CreateFileW((folder+name).c_str(),FILE_APPEND_DATA,FILE_SHARE_READ|FILE_SHARE_WRITE,nullptr,OPEN_ALWAYS,FILE_ATTRIBUTE_NORMAL,nullptr);
@@ -121,7 +121,7 @@ static DWORD WINAPI outputThread(void*){
         if(udp!=INVALID_SOCKET){TriggerPacket packet;
             EnterCriticalSection(&lock);
             ULONGLONG t=GetTickCount64();
-            if(t-triggerFreshness<=150){packet.left=triggerLeft;packet.right=triggerRight;}
+            if(t-triggerFreshness<=150){packet.left=triggerLeft;packet.right=triggerRight;if(packet.left||packet.right)packet.flags=rn::drivingTriggers;}
             if((onFoot.load()?triggerShotFoot:triggerShotVehicle)&&t-shotFreshness<=100)packet.right=std::max(packet.right,shotTrigger);
             LeaveCriticalSection(&lock);
             if(!foreground())packet.left=packet.right=0;

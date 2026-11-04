@@ -2,6 +2,7 @@
 // No EVIOCGRAB, driver installation, Steam configuration or root required.
 #include <SDL3/SDL.h>
 #include "rumble_levels.hpp"
+#include "trigger_packet.hpp"
 #include <linux/uinput.h>
 #include <linux/usbdevice_fs.h>
 #include <filesystem>
@@ -26,8 +27,7 @@ static void stop(int){stopRequested=1;}
 static void fatal(const char* what){fprintf(stderr,"%s: %s\n",what,strerror(errno));}
 static uint64_t now(){return SDL_GetTicks();}
 struct Effect {ff_effect effect{};bool running=false;uint64_t begins=0,ends=0;};
-struct Packet {uint32_t magic;uint16_t left,right;};
-static_assert(sizeof(Packet)==8);
+using Packet=rn::TriggerPacket;
 static bool event(int fd,unsigned short type,unsigned short code,int value){
     input_event e{};e.type=type;e.code=code;e.value=value;return write(fd,&e,sizeof e)==sizeof e;
 }
@@ -137,9 +137,11 @@ int main(int argc,char** argv){
             feedback(ui,effects);
             Packet incoming{};ssize_t n;
             // MSG_TRUNC rejects oversized datagrams. Only exact-size local commands count.
-            while((n=recv(sock,&incoming,sizeof incoming,MSG_TRUNC))>=0){if(n==sizeof incoming&&incoming.magic==0x354E4252){trigger=incoming;received=now();++packets;if(trigger.left||trigger.right)++nonzero;}}
+            while((n=recv(sock,&incoming,sizeof incoming,MSG_TRUNC))>=0){if(rn::decodeTriggers(&incoming,size_t(n),trigger)){received=now();++packets;if(trigger.left||trigger.right)++nonzero;}}
             int l=0,r=0;for(auto& e:effects)if(e.running&&now()>=e.begins){if(e.ends&&now()>=e.ends){e.running=false;continue;}l=std::min(65535,l+int(e.effect.u.rumble.strong_magnitude));r=std::min(65535,r+int(e.effect.u.rumble.weak_magnitude));}
             int tl=0,tr=0;if(received&&now()-received<=250){tl=std::min(8191,int(trigger.left));tr=std::min(8191,int(trigger.right));}
+            // Only fresh, explicitly identified driving triggers mute main motors.
+            if(received&&rn::muteDrivingMain(trigger,now()-received,tl,tr))l=r=0;
             if(now()-lastSend>=40){
                 if(l!=oldL||r!=oldR||l||r){if(!SDL_RumbleGamepad(pad,gipMainLevel(l),gipMainLevel(r),120)){fprintf(stderr,"Main rumble failed: %s\n",SDL_GetError());result=1;break;}oldL=l;oldR=r;}
                 if(tl!=oldTL||tr!=oldTR||tl||tr){if(!SDL_RumbleGamepadTriggers(pad,uint16_t(tl),uint16_t(tr),120)){fprintf(stderr,"Trigger rumble failed: %s\n",SDL_GetError());result=1;break;}oldTL=tl;oldTR=tr;}

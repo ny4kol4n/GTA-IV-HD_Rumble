@@ -1,2 +1,2 @@
-99823d0cccdb289c79b79f1c09a94c3b697b1bf1a7d4364b8ef26a68edccc278  GTA-IV-HD_Rumble.asi
-e615e0db1d1971a92f5fd3a2ddd47b2ffa12717ae482ac4d6eaa51c35de64c0e  bridge/rumblenuts-bridge
+5d8d3ef8c2344affd3ea808e9bac58d58333e44fccde4a3fa3bbc0c89611b578  GTA-IV-HD_Rumble.asi
+4adb9d7479e4d53e80380e6e458d35eda1d527885bd465993177e7f662e95a85  bridge/rumblenuts-bridge
