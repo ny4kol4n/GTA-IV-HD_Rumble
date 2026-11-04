@@ -77,6 +77,27 @@ int main(){
         Sample car;car.vehicle=1;car.health=1000;car.speed=25;drift.step(car,50000);
         car.speed-=.02f;auto out=drift.step(car,50070);assert(!out.braking);
     }
+    // Both motorcycle groups must sustain acceleration without periodic gaps.
+    for (uint32_t model : {0xCADD5D2Du, 0x92E56A2Cu}) {
+        for (int profile=0; profile<3; ++profile) {
+            for (uint64_t interval : {70u, 140u}) {
+                Engine bike; bike.profile=profile;
+                Sample ride; ride.vehicle=1; ride.model=model; ride.bike=true;
+                ride.health=1000; ride.speed=10;
+                bike.step(ride,70000);
+                uint16_t left=0,right=0;
+                for (int i=1;i<=30;++i) {
+                    ride.speed+=.2f*float(interval)/70.f;
+                    auto out=bike.step(ride,70000+interval*i);
+                    assert(out.acceleration&&out.left>0&&out.right>0);
+                    if(i==1){left=out.left;right=out.right;}
+                    assert(out.left==left&&out.right==right);
+                }
+                auto coast=bike.step(ride,70000+interval*31);
+                assert(!coast.acceleration&&coast.left==0&&coast.right==0);
+            }
+        }
+    }
     assert(parseSetting("nan",100,0,400)==100);
     assert(parseSetting("oops",100,0,400)==100);
     assert(parseSetting("50abc",100,0,400)==100);

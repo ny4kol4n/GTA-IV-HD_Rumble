@@ -12,7 +12,7 @@ struct Output { bool acceleration=false,braking=false; uint16_t left=0,right=0; 
 inline const char* profileName(int p){return p==0?"Strong":p==1?"Medium":"Light";}
 class Engine {
     Sample prev{}; bool valid=false; uint64_t motion=0,slow=0,last=0;
-    uint64_t accel=0,gear=0,bump=0,turn=0;
+    uint64_t gear=0,bump=0,turn=0;
     bool slowActive=false;
 public:
     int profile=1;
@@ -22,7 +22,7 @@ public:
         Output o; o.group=group(s.model);
         if(!valid || prev.vehicle!=s.vehicle || prev.model!=s.model || now-last>500){
             prev=s;valid=true;motion=now;slowActive=false;last=now;
-            accel=gear=bump=turn=0;return o;
+            gear=bump=turn=0;return o;
         }
         const float sampleScale=70.f/float(std::max(uint64_t(1),now-last));
         last=now;
@@ -35,11 +35,11 @@ public:
         if(slowActive && now-slow>500) return o;
         constexpr float factors[]={.35f,.35f,.35f},gt[]={-.25f,-.40f,-.50f},zt[]={.4f,.6f,.8f},tt[]={10,15,20};
         constexpr int gc[]={300,400,600},zc[]={1000,1500,2000},tc[]={300,500,800};
-        int p=std::clamp(profile,0,2), ac=0,turnCool=tc[p]; float f=factors[p];
+        int p=std::clamp(profile,0,2), turnCool=tc[p]; float f=factors[p];
         float a=.4f,b=.6f,g=.3f,t=.4f,z=.3f;
         auto is=[&](const char* x){return std::strcmp(o.group,x)==0;};
-        if(is("MotoRacer")){a=.3f;b=.6f;g=.3f;t=2.2f;z=1;turnCool=150;ac=180;}
-        else if(is("MotoChopper")){a=.8f;b=1;g=.7f;t=.4f;z=1.2f;turnCool=550;ac=450;}
+        if(is("MotoRacer")){a=.3f;b=.6f;g=.3f;t=2.2f;z=1;turnCool=150;}
+        else if(is("MotoChopper")){a=.8f;b=1;g=.7f;t=.4f;z=1.2f;turnCool=550;}
         else if(is("Sports")){a=.8f;b=.5f;g=.8f;t=.4f;z=.4f;}
         else if(is("Muscle")){a=.9f;b=.8f;g=.8f;t=.5f;z=.5f;}
         else if(is("Truck")){a=.3f;b=.6f;g=.3f;t=.5f;z=.2f;}
@@ -58,7 +58,7 @@ public:
             if(left||right)o.event="Burst tyre";
         }
         if(settings.damage>0&&o.damage>0){int n=int(std::clamp(int64_t(o.damage)*1000,int64_t(10000),int64_t(65535)));add(float(n)*settings.damage,float(n)*settings.damage);o.event="Damage";}
-        if(settings.acceleration>0 && ds*sampleScale>settings.accelThreshold[p] && now-accel>uint64_t(ac)){add(12000*a*f*settings.acceleration,22000*a*f*settings.acceleration);accel=now;o.event="Accel";o.acceleration=true;}
+        if(settings.acceleration>0 && ds*sampleScale>settings.accelThreshold[p]){add(12000*a*f*settings.acceleration,22000*a*f*settings.acceleration);o.event="Accel";o.acceleration=true;}
         if(settings.gear>0 && ds<gt[p] && now-gear>uint64_t(gc[p])){add(20000*g*f*settings.gear,24000*g*f*settings.gear);gear=now;o.event="Gear";}
         if(settings.braking>0 && ds*sampleScale<-settings.brakeThreshold[p]){add(18000*b*f*settings.braking,15000*b*f*settings.braking);o.event="Brake";o.braking=true;}
         if(settings.bump>0 && dz>zt[p] && now-bump>uint64_t(zc[p])){add(14000*z*f*settings.bump,14000*z*f*settings.bump);bump=now;o.event="Curb/Bump";}
